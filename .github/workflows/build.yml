@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ gcc, clang ]
+        target: [ Both, Shared, Static ]
+        jpeg: [ on, off ]
+
+    name: ${{ matrix.compiler }}, ${{ matrix.target }}${{ matrix.jpeg == 'off' && ', no jpeg' || '' }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libusb-1.0-0-dev
+          if [ "${{ matrix.jpeg }}" = "on" ]; then
+            sudo apt-get install -y libjpeg-dev
+          fi
+
+      - name: Configure
+        env:
+          CC: ${{ matrix.compiler }}
+        run: |
+          # LibUVC_STATIC makes the LibUVC::UVC alias point at the static
+          # library, which the example program links against.
+          cmake -B build \
+            -DCMAKE_BUILD_TARGET=${{ matrix.target }} \
+            -DLibUVC_STATIC=${{ matrix.target == 'Static' && 'ON' || 'OFF' }} \
+            -DBUILD_EXAMPLE=ON \
+            ${{ matrix.jpeg == 'off' && '-DCMAKE_DISABLE_FIND_PACKAGE_JpegPkg=ON' || '' }}
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Check example was built
+        run: test -x build/example
