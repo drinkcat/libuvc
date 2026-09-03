@@ -14,10 +14,15 @@
 #include <libusb.h>
 #include "utlist.h"
 
+/** Converts an unaligned four-byte little-endian integer into a uint32 */
+#define DW_TO_UINT32(p) ((uint32_t)(p)[0] | ((uint32_t)(p)[1] << 8) | \
+                         ((uint32_t)(p)[2] << 16) | ((uint32_t)(p)[3] << 24))
+/** Converts an unaligned two-byte little-endian integer into a uint16 */
+#define SW_TO_UINT16(p) ((uint16_t)((p)[0] | ((p)[1] << 8)))
 /** Converts an unaligned four-byte little-endian integer into an int32 */
-#define DW_TO_INT(p) ((p)[0] | ((p)[1] << 8) | ((p)[2] << 16) | ((p)[3] << 24))
+#define DW_TO_INT32(p) ((int32_t)DW_TO_UINT32(p))
 /** Converts an unaligned two-byte little-endian integer into an int16 */
-#define SW_TO_SHORT(p) ((p)[0] | ((p)[1] << 8))
+#define SW_TO_INT16(p) ((int16_t)SW_TO_UINT16(p))
 /** Converts an int16 into an unaligned two-byte little-endian integer */
 #define SHORT_TO_SW(s, p) \
   (p)[0] = (s); \

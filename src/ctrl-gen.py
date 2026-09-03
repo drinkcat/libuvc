@@ -44,9 +44,11 @@ class IntField(object):
         if self.length == 1:
             return "*{0} = data[{1}];".format(self.name, self.position)
         elif self.length == 2:
-            return "*{0} = SW_TO_SHORT(data + {1});".format(self.name, self.position)
+            macro = "SW_TO_INT16" if self.signed else "SW_TO_UINT16"
+            return "*{0} = {1}(data + {2});".format(self.name, macro, self.position)
         elif self.length == 4:
-            return "*{0} = DW_TO_INT(data + {1});".format(self.name, self.position)
+            macro = "DW_TO_INT32" if self.signed else "DW_TO_UINT32"
+            return "*{0} = {1}(data + {2});".format(self.name, macro, self.position)
 
     def setter_sig(self):
         return "{0} {1}".format(self.user_type, self.name)

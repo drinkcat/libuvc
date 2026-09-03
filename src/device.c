@@ -1127,14 +1127,14 @@ uvc_error_t uvc_parse_vc_header(uvc_device_t *dev,
     + (block[3] >> 4) * 10 + (block[3] & 0x0f);
   */
 
-  info->ctrl_if.bcdUVC = SW_TO_SHORT(&block[3]);
+  info->ctrl_if.bcdUVC = SW_TO_UINT16(&block[3]);
 
   switch (info->ctrl_if.bcdUVC) {
   case 0x0100:
-    info->ctrl_if.dwClockFrequency = DW_TO_INT(block + 7);
+    info->ctrl_if.dwClockFrequency = DW_TO_UINT32(block + 7);
     break;
   case 0x010a:
-    info->ctrl_if.dwClockFrequency = DW_TO_INT(block + 7);
+    info->ctrl_if.dwClockFrequency = DW_TO_UINT32(block + 7);
     break;
   case 0x0110:
     break;
@@ -1170,7 +1170,7 @@ uvc_error_t uvc_parse_vc_input_terminal(uvc_device_t *dev,
   UVC_ENTER();
 
   /* only supporting camera-type input terminals */
-  if (SW_TO_SHORT(&block[4]) != UVC_ITT_CAMERA) {
+  if (SW_TO_UINT16(&block[4]) != UVC_ITT_CAMERA) {
     UVC_EXIT(UVC_SUCCESS);
     return UVC_SUCCESS;
   }
@@ -1178,10 +1178,10 @@ uvc_error_t uvc_parse_vc_input_terminal(uvc_device_t *dev,
   term = calloc(1, sizeof(*term));
 
   term->bTerminalID = block[3];
-  term->wTerminalType = SW_TO_SHORT(&block[4]);
-  term->wObjectiveFocalLengthMin = SW_TO_SHORT(&block[8]);
-  term->wObjectiveFocalLengthMax = SW_TO_SHORT(&block[10]);
-  term->wOcularFocalLength = SW_TO_SHORT(&block[12]);
+  term->wTerminalType = SW_TO_UINT16(&block[4]);
+  term->wObjectiveFocalLengthMin = SW_TO_UINT16(&block[8]);
+  term->wObjectiveFocalLengthMax = SW_TO_UINT16(&block[10]);
+  term->wOcularFocalLength = SW_TO_UINT16(&block[12]);
 
   for (i = 14 + block[14]; i >= 15; --i)
     term->bmControls = block[i] + (term->bmControls << 8);
@@ -1487,22 +1487,22 @@ uvc_error_t uvc_parse_vs_frame_frame(uvc_streaming_interface_t *stream_if,
   frame->bmCapabilities = block[4];
   frame->wWidth = block[5] + (block[6] << 8);
   frame->wHeight = block[7] + (block[8] << 8);
-  frame->dwMinBitRate = DW_TO_INT(&block[9]);
-  frame->dwMaxBitRate = DW_TO_INT(&block[13]);
-  frame->dwDefaultFrameInterval = DW_TO_INT(&block[17]);
+  frame->dwMinBitRate = DW_TO_UINT32(&block[9]);
+  frame->dwMaxBitRate = DW_TO_UINT32(&block[13]);
+  frame->dwDefaultFrameInterval = DW_TO_UINT32(&block[17]);
   frame->bFrameIntervalType = block[21];
-  frame->dwBytesPerLine = DW_TO_INT(&block[22]);
+  frame->dwBytesPerLine = DW_TO_UINT32(&block[22]);
 
   if (block[21] == 0) {
-    frame->dwMinFrameInterval = DW_TO_INT(&block[26]);
-    frame->dwMaxFrameInterval = DW_TO_INT(&block[30]);
-    frame->dwFrameIntervalStep = DW_TO_INT(&block[34]);
+    frame->dwMinFrameInterval = DW_TO_UINT32(&block[26]);
+    frame->dwMaxFrameInterval = DW_TO_UINT32(&block[30]);
+    frame->dwFrameIntervalStep = DW_TO_UINT32(&block[34]);
   } else {
     frame->intervals = calloc(block[21] + 1, sizeof(frame->intervals[0]));
     p = &block[26];
 
     for (i = 0; i < block[21]; ++i) {
-      frame->intervals[i] = DW_TO_INT(p);
+      frame->intervals[i] = DW_TO_UINT32(p);
       p += 4;
     }
     frame->intervals[block[21]] = 0;
@@ -1539,22 +1539,22 @@ uvc_error_t uvc_parse_vs_frame_uncompressed(uvc_streaming_interface_t *stream_if
   frame->bmCapabilities = block[4];
   frame->wWidth = block[5] + (block[6] << 8);
   frame->wHeight = block[7] + (block[8] << 8);
-  frame->dwMinBitRate = DW_TO_INT(&block[9]);
-  frame->dwMaxBitRate = DW_TO_INT(&block[13]);
-  frame->dwMaxVideoFrameBufferSize = DW_TO_INT(&block[17]);
-  frame->dwDefaultFrameInterval = DW_TO_INT(&block[21]);
+  frame->dwMinBitRate = DW_TO_UINT32(&block[9]);
+  frame->dwMaxBitRate = DW_TO_UINT32(&block[13]);
+  frame->dwMaxVideoFrameBufferSize = DW_TO_UINT32(&block[17]);
+  frame->dwDefaultFrameInterval = DW_TO_UINT32(&block[21]);
   frame->bFrameIntervalType = block[25];
 
   if (block[25] == 0) {
-    frame->dwMinFrameInterval = DW_TO_INT(&block[26]);
-    frame->dwMaxFrameInterval = DW_TO_INT(&block[30]);
-    frame->dwFrameIntervalStep = DW_TO_INT(&block[34]);
+    frame->dwMinFrameInterval = DW_TO_UINT32(&block[26]);
+    frame->dwMaxFrameInterval = DW_TO_UINT32(&block[30]);
+    frame->dwFrameIntervalStep = DW_TO_UINT32(&block[34]);
   } else {
     frame->intervals = calloc(block[25] + 1, sizeof(frame->intervals[0]));
     p = &block[26];
 
     for (i = 0; i < block[25]; ++i) {
-      frame->intervals[i] = DW_TO_INT(p);
+      frame->intervals[i] = DW_TO_UINT32(p);
       p += 4;
     }
     frame->intervals[block[25]] = 0;
@@ -1598,9 +1598,9 @@ uvc_error_t uvc_parse_vs_still_image_frame(uvc_streaming_interface_t *stream_if,
   for (i = 1; i <= numImageSizePatterns; ++i) {
     uvc_still_frame_res_t* res = calloc(1, sizeof(uvc_still_frame_res_t));
     res->bResolutionIndex = i;
-    res->wWidth = SW_TO_SHORT(p);
+    res->wWidth = SW_TO_UINT16(p);
     p += 2;
-    res->wHeight = SW_TO_SHORT(p);
+    res->wHeight = SW_TO_UINT16(p);
     p += 2;
 
     DL_APPEND(frame->imageSizePatterns, res);

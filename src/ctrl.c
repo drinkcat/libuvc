@@ -71,7 +71,7 @@ int uvc_get_ctrl_len(uvc_device_handle_t *devh, uint8_t unit, uint8_t ctrl) {
   if (ret < 0)
     return ret;
   else
-    return (unsigned short)SW_TO_SHORT(buf);
+    return SW_TO_UINT16(buf);
 }
 
 /**
