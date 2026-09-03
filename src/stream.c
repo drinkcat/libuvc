@@ -249,15 +249,15 @@ uvc_error_t uvc_query_stream_ctrl(
 
   /* now decode following a GET transfer */
   if (req != UVC_SET_CUR) {
-    ctrl->bmHint = SW_TO_SHORT(buf);
+    ctrl->bmHint = SW_TO_UINT16(buf);
     ctrl->bFormatIndex = buf[2];
     ctrl->bFrameIndex = buf[3];
     ctrl->dwFrameInterval = DW_TO_UINT32(buf + 4);
-    ctrl->wKeyFrameRate = SW_TO_SHORT(buf + 8);
-    ctrl->wPFrameRate = SW_TO_SHORT(buf + 10);
-    ctrl->wCompQuality = SW_TO_SHORT(buf + 12);
-    ctrl->wCompWindowSize = SW_TO_SHORT(buf + 14);
-    ctrl->wDelay = SW_TO_SHORT(buf + 16);
+    ctrl->wKeyFrameRate = SW_TO_UINT16(buf + 8);
+    ctrl->wPFrameRate = SW_TO_UINT16(buf + 10);
+    ctrl->wCompQuality = SW_TO_UINT16(buf + 12);
+    ctrl->wCompWindowSize = SW_TO_UINT16(buf + 14);
+    ctrl->wDelay = SW_TO_UINT16(buf + 16);
     ctrl->dwMaxVideoFrameSize = DW_TO_UINT32(buf + 18);
     ctrl->dwMaxPayloadTransferSize = DW_TO_UINT32(buf + 22);
 

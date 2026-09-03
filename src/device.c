@@ -1127,7 +1127,7 @@ uvc_error_t uvc_parse_vc_header(uvc_device_t *dev,
     + (block[3] >> 4) * 10 + (block[3] & 0x0f);
   */
 
-  info->ctrl_if.bcdUVC = SW_TO_SHORT(&block[3]);
+  info->ctrl_if.bcdUVC = SW_TO_UINT16(&block[3]);
 
   switch (info->ctrl_if.bcdUVC) {
   case 0x0100:
@@ -1170,7 +1170,7 @@ uvc_error_t uvc_parse_vc_input_terminal(uvc_device_t *dev,
   UVC_ENTER();
 
   /* only supporting camera-type input terminals */
-  if (SW_TO_SHORT(&block[4]) != UVC_ITT_CAMERA) {
+  if (SW_TO_UINT16(&block[4]) != UVC_ITT_CAMERA) {
     UVC_EXIT(UVC_SUCCESS);
     return UVC_SUCCESS;
   }
@@ -1178,10 +1178,10 @@ uvc_error_t uvc_parse_vc_input_terminal(uvc_device_t *dev,
   term = calloc(1, sizeof(*term));
 
   term->bTerminalID = block[3];
-  term->wTerminalType = SW_TO_SHORT(&block[4]);
-  term->wObjectiveFocalLengthMin = SW_TO_SHORT(&block[8]);
-  term->wObjectiveFocalLengthMax = SW_TO_SHORT(&block[10]);
-  term->wOcularFocalLength = SW_TO_SHORT(&block[12]);
+  term->wTerminalType = SW_TO_UINT16(&block[4]);
+  term->wObjectiveFocalLengthMin = SW_TO_UINT16(&block[8]);
+  term->wObjectiveFocalLengthMax = SW_TO_UINT16(&block[10]);
+  term->wOcularFocalLength = SW_TO_UINT16(&block[12]);
 
   for (i = 14 + block[14]; i >= 15; --i)
     term->bmControls = block[i] + (term->bmControls << 8);
@@ -1598,9 +1598,9 @@ uvc_error_t uvc_parse_vs_still_image_frame(uvc_streaming_interface_t *stream_if,
   for (i = 1; i <= numImageSizePatterns; ++i) {
     uvc_still_frame_res_t* res = calloc(1, sizeof(uvc_still_frame_res_t));
     res->bResolutionIndex = i;
-    res->wWidth = SW_TO_SHORT(p);
+    res->wWidth = SW_TO_UINT16(p);
     p += 2;
-    res->wHeight = SW_TO_SHORT(p);
+    res->wHeight = SW_TO_UINT16(p);
     p += 2;
 
     DL_APPEND(frame->imageSizePatterns, res);

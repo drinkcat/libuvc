@@ -44,7 +44,7 @@ class IntField(object):
         if self.length == 1:
             return "*{0} = data[{1}];".format(self.name, self.position)
         elif self.length == 2:
-            return "*{0} = SW_TO_SHORT(data + {1});".format(self.name, self.position)
+            return "*{0} = SW_TO_UINT16(data + {1});".format(self.name, self.position)
         elif self.length == 4:
             return "*{0} = DW_TO_UINT32(data + {1});".format(self.name, self.position)
 

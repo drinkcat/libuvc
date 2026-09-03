@@ -315,7 +315,7 @@ uvc_error_t uvc_get_focus_abs(uvc_device_handle_t *devh, uint16_t* focus, enum u
     0);
 
   if (ret == sizeof(data)) {
-    *focus = SW_TO_SHORT(data + 0);
+    *focus = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -535,7 +535,7 @@ uvc_error_t uvc_get_iris_abs(uvc_device_handle_t *devh, uint16_t* iris, enum uvc
     0);
 
   if (ret == sizeof(data)) {
-    *iris = SW_TO_SHORT(data + 0);
+    *iris = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -643,7 +643,7 @@ uvc_error_t uvc_get_zoom_abs(uvc_device_handle_t *devh, uint16_t* focal_length, 
     0);
 
   if (ret == sizeof(data)) {
-    *focal_length = SW_TO_SHORT(data + 0);
+    *focal_length = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -883,7 +883,7 @@ uvc_error_t uvc_get_roll_abs(uvc_device_handle_t *devh, int16_t* roll, enum uvc_
     0);
 
   if (ret == sizeof(data)) {
-    *roll = SW_TO_SHORT(data + 0);
+    *roll = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1054,12 +1054,12 @@ uvc_error_t uvc_get_digital_window(uvc_device_handle_t *devh, uint16_t* window_t
     0);
 
   if (ret == sizeof(data)) {
-    *window_top = SW_TO_SHORT(data + 0);
-    *window_left = SW_TO_SHORT(data + 2);
-    *window_bottom = SW_TO_SHORT(data + 4);
-    *window_right = SW_TO_SHORT(data + 6);
-    *num_steps = SW_TO_SHORT(data + 8);
-    *num_steps_units = SW_TO_SHORT(data + 10);
+    *window_top = SW_TO_UINT16(data + 0);
+    *window_left = SW_TO_UINT16(data + 2);
+    *window_bottom = SW_TO_UINT16(data + 4);
+    *window_right = SW_TO_UINT16(data + 6);
+    *num_steps = SW_TO_UINT16(data + 8);
+    *num_steps_units = SW_TO_UINT16(data + 10);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1127,11 +1127,11 @@ uvc_error_t uvc_get_digital_roi(uvc_device_handle_t *devh, uint16_t* roi_top, ui
     0);
 
   if (ret == sizeof(data)) {
-    *roi_top = SW_TO_SHORT(data + 0);
-    *roi_left = SW_TO_SHORT(data + 2);
-    *roi_bottom = SW_TO_SHORT(data + 4);
-    *roi_right = SW_TO_SHORT(data + 6);
-    *auto_controls = SW_TO_SHORT(data + 8);
+    *roi_top = SW_TO_UINT16(data + 0);
+    *roi_left = SW_TO_UINT16(data + 2);
+    *roi_bottom = SW_TO_UINT16(data + 4);
+    *roi_right = SW_TO_UINT16(data + 6);
+    *auto_controls = SW_TO_UINT16(data + 8);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1193,7 +1193,7 @@ uvc_error_t uvc_get_backlight_compensation(uvc_device_handle_t *devh, uint16_t* 
     0);
 
   if (ret == sizeof(data)) {
-    *backlight_compensation = SW_TO_SHORT(data + 0);
+    *backlight_compensation = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1247,7 +1247,7 @@ uvc_error_t uvc_get_brightness(uvc_device_handle_t *devh, int16_t* brightness, e
     0);
 
   if (ret == sizeof(data)) {
-    *brightness = SW_TO_SHORT(data + 0);
+    *brightness = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1301,7 +1301,7 @@ uvc_error_t uvc_get_contrast(uvc_device_handle_t *devh, uint16_t* contrast, enum
     0);
 
   if (ret == sizeof(data)) {
-    *contrast = SW_TO_SHORT(data + 0);
+    *contrast = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1409,7 +1409,7 @@ uvc_error_t uvc_get_gain(uvc_device_handle_t *devh, uint16_t* gain, enum uvc_req
     0);
 
   if (ret == sizeof(data)) {
-    *gain = SW_TO_SHORT(data + 0);
+    *gain = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1517,7 +1517,7 @@ uvc_error_t uvc_get_hue(uvc_device_handle_t *devh, int16_t* hue, enum uvc_req_co
     0);
 
   if (ret == sizeof(data)) {
-    *hue = SW_TO_SHORT(data + 0);
+    *hue = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1625,7 +1625,7 @@ uvc_error_t uvc_get_saturation(uvc_device_handle_t *devh, uint16_t* saturation, 
     0);
 
   if (ret == sizeof(data)) {
-    *saturation = SW_TO_SHORT(data + 0);
+    *saturation = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1679,7 +1679,7 @@ uvc_error_t uvc_get_sharpness(uvc_device_handle_t *devh, uint16_t* sharpness, en
     0);
 
   if (ret == sizeof(data)) {
-    *sharpness = SW_TO_SHORT(data + 0);
+    *sharpness = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1733,7 +1733,7 @@ uvc_error_t uvc_get_gamma(uvc_device_handle_t *devh, uint16_t* gamma, enum uvc_r
     0);
 
   if (ret == sizeof(data)) {
-    *gamma = SW_TO_SHORT(data + 0);
+    *gamma = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1787,7 +1787,7 @@ uvc_error_t uvc_get_white_balance_temperature(uvc_device_handle_t *devh, uint16_
     0);
 
   if (ret == sizeof(data)) {
-    *temperature = SW_TO_SHORT(data + 0);
+    *temperature = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1896,8 +1896,8 @@ uvc_error_t uvc_get_white_balance_component(uvc_device_handle_t *devh, uint16_t*
     0);
 
   if (ret == sizeof(data)) {
-    *blue = SW_TO_SHORT(data + 0);
-    *red = SW_TO_SHORT(data + 2);
+    *blue = SW_TO_UINT16(data + 0);
+    *red = SW_TO_UINT16(data + 2);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -2007,7 +2007,7 @@ uvc_error_t uvc_get_digital_multiplier(uvc_device_handle_t *devh, uint16_t* mult
     0);
 
   if (ret == sizeof(data)) {
-    *multiplier_step = SW_TO_SHORT(data + 0);
+    *multiplier_step = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -2061,7 +2061,7 @@ uvc_error_t uvc_get_digital_multiplier_limit(uvc_device_handle_t *devh, uint16_t
     0);
 
   if (ret == sizeof(data)) {
-    *multiplier_step = SW_TO_SHORT(data + 0);
+    *multiplier_step = SW_TO_UINT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
