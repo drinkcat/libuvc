@@ -760,8 +760,8 @@ uvc_error_t uvc_get_pantilt_abs(uvc_device_handle_t *devh, int32_t* pan, int32_t
     0);
 
   if (ret == sizeof(data)) {
-    *pan = DW_TO_UINT32(data + 0);
-    *tilt = DW_TO_UINT32(data + 4);
+    *pan = DW_TO_INT32(data + 0);
+    *tilt = DW_TO_INT32(data + 4);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -883,7 +883,7 @@ uvc_error_t uvc_get_roll_abs(uvc_device_handle_t *devh, int16_t* roll, enum uvc_
     0);
 
   if (ret == sizeof(data)) {
-    *roll = SW_TO_UINT16(data + 0);
+    *roll = SW_TO_INT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1247,7 +1247,7 @@ uvc_error_t uvc_get_brightness(uvc_device_handle_t *devh, int16_t* brightness, e
     0);
 
   if (ret == sizeof(data)) {
-    *brightness = SW_TO_UINT16(data + 0);
+    *brightness = SW_TO_INT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
@@ -1517,7 +1517,7 @@ uvc_error_t uvc_get_hue(uvc_device_handle_t *devh, int16_t* hue, enum uvc_req_co
     0);
 
   if (ret == sizeof(data)) {
-    *hue = SW_TO_UINT16(data + 0);
+    *hue = SW_TO_INT16(data + 0);
     return UVC_SUCCESS;
   } else {
     return ret;
