@@ -25,6 +25,10 @@ option(BUILD_EXAMPLE "Build example program" ON)
 option(BUILD_TEST "Build test program" OFF)
 option(ENABLE_UVC_DEBUGGING "Enable UVC debugging" OFF)
 option(DISABLE_JPEG "Disable JPEG support" OFF)
+set(LIBUVC_NUM_TRANSFER_BUFS "" CACHE STRING
+  "Number of transfers queued per stream (empty: 100, or 20 on macOS)")
+set(LIBUVC_PACKETS_PER_TRANSFER_MAX "" CACHE STRING
+  "Maximum isochronous packets per transfer (empty: 32); lower it if streaming fails with ENOMEM, e.g. on Android")
 
 set(libuvc_DESCRIPTION "A cross-platform library for USB video devices")
 set(libuvc_URL "https://github.com/libuvc/libuvc")
@@ -131,6 +135,14 @@ foreach(target_name IN LISTS UVC_TARGETS)
   set_target_properties(${target_name} PROPERTIES
       PUBLIC_HEADER "include/libuvc/libuvc.h;${CMAKE_CURRENT_BINARY_DIR}/include/libuvc/libuvc_config.h"
   )
+  foreach(tuning IN ITEMS LIBUVC_NUM_TRANSFER_BUFS LIBUVC_PACKETS_PER_TRANSFER_MAX)
+    if(NOT "${${tuning}}" STREQUAL "")
+      target_compile_definitions(${target_name}
+        PRIVATE
+          ${tuning}=${${tuning}}
+      )
+    endif()
+  endforeach()
   if(ENABLE_UVC_DEBUGGING)
     target_compile_definitions(${target_name}
       PRIVATE
