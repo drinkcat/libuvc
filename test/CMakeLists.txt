@@ -50,7 +50,15 @@ target_link_libraries(test_stream
 )
 target_include_directories(test_stream PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-foreach(test_name IN ITEMS test_frame test_frame_reference test_frame_mjpeg test_descriptor test_stream)
+# Replaces libusb_control_transfer(), which needs the static library, where
+# the test's own definition takes precedence over libusb's.
+add_executable(test_stream_ctrl test_stream_ctrl.cc)
+target_link_libraries(test_stream_ctrl
+  PRIVATE uvc_static LibUSB::LibUSB GTest::gtest_main
+)
+target_include_directories(test_stream_ctrl PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+foreach(test_name IN ITEMS test_frame test_frame_reference test_frame_mjpeg test_descriptor test_stream test_stream_ctrl)
   gtest_discover_tests(${test_name}
     DISCOVERY_TIMEOUT 30
     # A zero-length descriptor makes uvc_scan_streaming() loop forever, so a
